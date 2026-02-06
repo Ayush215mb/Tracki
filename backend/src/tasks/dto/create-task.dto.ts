@@ -1,5 +1,6 @@
 // modules/tasks/dto/create-task.dto.ts
-import { IsString, IsNumber, Min, Max, IsNotEmpty } from 'class-validator';
+import {IsString, IsNumber, IsNotEmpty, IsEnum} from 'class-validator';
+import {TaskPoints} from "../taskpoints.entity.js";
 
 export class CreateTaskDto {
     @IsString()
@@ -10,7 +11,6 @@ export class CreateTaskDto {
     description: string;
 
     @IsNumber()
-    @Min(1)
-    @Max(10)
+    @IsEnum(TaskPoints)
     points: number;
 }

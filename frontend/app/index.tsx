@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { Link } from "expo-router";
-import { Screen } from "../components/layout/Screen";
-import { TaskItem } from "../features/tasks/components/TaskItem";
-import { TaskForm } from "../features/tasks/components/TaskForm";
-import type { Task } from "../lib/types";
+import { Screen } from "@/components/layout/Screen";
+import { TaskItem } from "@/features/tasks/components/TaskItem";
+import { TaskForm } from "@/features/tasks/components/TaskForm";
+import type { Task } from "@/lib/types";
 import {useTasks, UseTasksResult} from "@/features/tasks/hooks/useTasks";
 
 const mockTasks: Task[] = [

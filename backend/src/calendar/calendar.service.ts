@@ -1,34 +1,35 @@
 // modules/calendar/calendar.service.ts
-import { Injectable } from '@nestjs/common';
-import { TasksService } from '../tasks/tasks.service';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import { TasksService } from '../tasks/tasks.service.js';
+import {DatabaseService} from "../database/database.service.js";
+import {Task} from "../tasks/task.entity.js";
+import { Prisma } from '../generated/prisma/client.js';
+import {Completion} from "./completion.entity.js";
 
 @Injectable()
 export class CalendarService {
-    constructor(private readonly tasksService: TasksService) {}
+    constructor(private readonly tasksService: TasksService,private prisma: DatabaseService) {}
 
-    getCompletionStatusByDate() {
-        const allTasks = this.tasksService.findAll();
+   async createCompletion(data:Prisma.CompletionCreateInput):Promise<Completion> {
 
-        // Group tasks by date (YYYY-MM-DD)
-        const grouped = allTasks.reduce((acc, task) => {
-            const dateKey = task.createdAt.toISOString().split('T')[0];
-            if (!acc[dateKey]) acc[dateKey] = [];
-            acc[dateKey].push(task);
-            return acc;
-        }, {});
+        const taskId = data.TaskId;
 
-        // Map the groups to a status: "success" if all tasks on that day are done
-        return Object.keys(grouped).map(date => {
-            const dayTasks = grouped[date];
-            const allDone = dayTasks.every(t => t.isCompleted);
-            const totalPoints = dayTasks.reduce((sum, t) => sum + t.points, 0);
+        const taskExists:Task|null = await this.tasksService.getTaskById({id: taskId});
 
-            return {
-                date,
-                status: allDone ? 'success' : 'failed',
-                totalPoints,
-                taskCount: dayTasks.length
-            };
+        if(!taskExists){
+            throw new NotFoundException("Task does not exist");
+        }
+       return this.prisma.completion.create({data})
+    }
+
+    updateCompletion(params: {
+        where: Prisma.CompletionWhereUniqueInput;
+        data: Prisma.CompletionUpdateInput;
+    }) {
+        const { where, data } = params;
+        return this.prisma.completion.update({
+            data,
+            where,
         });
     }
 }
