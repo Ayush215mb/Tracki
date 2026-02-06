@@ -1,5 +1,21 @@
 import { Stack } from "expo-router";
-import '../global.css'
+import "../global.css";
+
 export default function RootLayout() {
-  return <Stack />;
+  return (
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Tasks",
+        }}
+      />
+      <Stack.Screen
+        name="calendar"
+        options={{
+          title: "Calendar",
+        }}
+      />
+    </Stack>
+  );
 }
