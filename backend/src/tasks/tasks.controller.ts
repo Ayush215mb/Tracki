@@ -10,22 +10,27 @@ export class TasksController {
     constructor(private readonly tasksService: TasksService) {}
 
     @Get()
-    getAll():Promise<Task[]> {
+    findAllTasks():Promise<Task[]> {
         return this.tasksService.findAllTasks();
     }
 
+    @Get(':id')
+    getTaskById(@Param('id') id:string):Promise<Task | null> {
+        return this.tasksService.getTaskById({id})
+    }
+
     @Post()
-    create(@Body() createTaskDto: CreateTaskDto):Promise<Task> {
+    createTask(@Body() createTaskDto: CreateTaskDto):Promise<Task> {
         return this.tasksService.createTask(createTaskDto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string):Promise<Task> {
+    deleteTask(@Param('id') id: string):Promise<Task> {
         return this.tasksService.deleteTask({id});
     }
 
     @Patch(':id')
-    Update(@Param('id') id:string, @Body() updateTaskDto: UpdateTaskDto):Promise<Task> {
+    updateTask(@Param('id') id:string, @Body() updateTaskDto: UpdateTaskDto):Promise<Task> {
         return this.tasksService.updateTask({
             where: {id},
             data: updateTaskDto,
