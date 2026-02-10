@@ -16,12 +16,15 @@ export class TasksService {
       return this.prisma.task.findMany();
     }
 
-    async createTask(data:Prisma.TaskCreateInput): Promise<Task> {
-        return this.prisma.task.create({data})
+    async createTask(data:Prisma.TaskCreateInput) {
+        return  this.prisma.task.create({data})
     }
 
-    deleteTask(id: Prisma.TaskWhereUniqueInput): Promise<Task> {
-       return this.prisma.task.delete({where:id})
+    deleteTask(id: Prisma.TaskWhereUniqueInput) {
+        const TaskDeletion= this.prisma.task.delete({where:id})
+
+        console.log(TaskDeletion)
+       return {message: "Task Deletion Successfully"}
     }
 
 

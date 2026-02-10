@@ -23,7 +23,7 @@ export class CompletionService {
         const taskId = data.TaskId;
         const taskExists:Task|null = await this.tasksService.getTaskById({id: taskId});
         if(!taskExists){
-            throw new NotFoundException("Task does not exist");
+            throw new NotFoundException("Tasks does not exist");
         }
         return this.prisma.completion.create({data})
     }

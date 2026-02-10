@@ -24,13 +24,13 @@ export class TasksController {
     //60,000 millisecond (60 second)
     @Throttle({ default: { limit: 5, ttl: 60000 } })
     @Post()
-    createTask(@Body() createTaskDto: CreateTaskDto):Promise<Task> {
+    createTask(@Body() createTaskDto: CreateTaskDto){
         return this.tasksService.createTask(createTaskDto);
     }
 
-    @Throttle({ default: { limit: 3, ttl: 30000 } })
+    @Throttle({ default: { limit: 3, ttl: 60000 } })
     @Delete(':id')
-    deleteTask(@Param('id') id: string):Promise<Task> {
+    deleteTask(@Param('id') id: string)  {
         return this.tasksService.deleteTask({id});
     }
 

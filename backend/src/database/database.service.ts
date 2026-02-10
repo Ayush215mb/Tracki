@@ -5,8 +5,11 @@ import { PrismaPg } from '@prisma/adapter-pg';
 @Injectable()
 export class DatabaseService extends PrismaClient implements OnModuleInit {
     constructor() {
+
+        const databaseurl = process.env.NODE_ENV ==="dev" ? process.env.DEV_DATABASE_URL: process.env.PROD_DATABASE_URL;
+
         const adapter = new PrismaPg({
-            connectionString: process.env.DATABASE_URL as string,
+            connectionString: databaseurl as string,
         });
         super({ adapter });
     }
