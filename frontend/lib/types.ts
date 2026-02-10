@@ -4,6 +4,7 @@ export type Task = {
   description: string;
   points: number;
 }
+
 export enum TaskPoints {
   FIVE = 5,
   TEN = 10,
@@ -18,6 +19,7 @@ export type Completion ={
   month : number;
   completed: Boolean;
 }
+
 export type ErrorTyp={
   code: number;
   message: string;

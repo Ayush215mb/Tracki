@@ -3,13 +3,13 @@ import { View, Text, TouchableOpacity, Animated } from 'react-native';
 
 const ErrorNotification = (
     {
-        title = "Error Occurred",
-        description = "Something went wrong. Please try again.",
+        title ,
+        description,
         onClose
     }:{
-        title:string;
-        description:string;
-        onClose:()=>void;
+        title?:string;
+        description?:string;
+        onClose?:()=>void;
     }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const slideAnim = useRef(new Animated.Value(-100)).current;

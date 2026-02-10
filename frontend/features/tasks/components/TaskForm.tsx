@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Keyboard, View } from "react-native";
-import { Input } from "../../../components/ui/Input";
-import { Button } from "../../../components/ui/Button";
-import { ErrorMessage } from "../../../components/ui/ErrorMessage";
+import {Keyboard, View, Text, TouchableOpacity, ActivityIndicator} from "react-native";
+import { Input } from "@/components/ui/Input";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import {TaskPoints} from "@/lib/types";
+import {createTask} from "@/services/api";
+import ErrorNotification from "@/components/ui/ErrorNotification";
 
 type TaskFormProps = {
   onSubmit: (values: {
@@ -12,12 +14,16 @@ type TaskFormProps = {
   }) => Promise<void>;
 };
 
-export function TaskForm({ onSubmit }: TaskFormProps) {
+export function TaskForm() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [points, setPoints] = useState("1");
+  const [points, setPoints] = useState("5");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+
+  const allowedPoints = new Set([TaskPoints.FIVE, TaskPoints.TEN, TaskPoints.TWENTY, TaskPoints.FIFTY]);
+
 
   const handleSubmit = async () => {
     const numericPoints = Number(points);
@@ -25,26 +31,30 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
       setError("Please enter a name for the task.");
       return;
     }
-    if (
-      Number.isNaN(numericPoints) ||
-      numericPoints < 1 ||
-      numericPoints > 10
-    ) {
-      setError("Points must be a number between 1 and 10.");
+
+    if (!description.trim()) {
+      setError("Please enter a small description for the task.");
+      return;
+    }
+    if (!allowedPoints.has(numericPoints)) {
+      setError("Points must be a number either 5, 10, 20, 50");
       return;
     }
 
     try {
       setSubmitting(true);
       setError(null);
-      await onSubmit({
+
+
+     const result= await createTask({
         name: name.trim(),
         description: description.trim(),
         points: numericPoints,
       });
+
       setName("");
       setDescription("");
-      setPoints("1");
+      setPoints("0");
       Keyboard.dismiss();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create task");
@@ -53,43 +63,67 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
     }
   };
 
+
+  if(submitting){
+    return (
+        <ActivityIndicator/>
+    )
+  }
+
   return (
-    <View className="mb-4 gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
-      <View className="flex-row items-end gap-3">
-        <View className="flex-1 gap-2">
+    <View className="mb-4 gap-3 rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-4 ">
+      <View className="">
+        <View className={"gap-3 mb-4"}>
+          <Text className={"text-xl font-extrabold text-white"}>
+            Enter the Task
+          </Text>
           <Input
-            label="Task name"
-            value={name}
-            onChangeText={setName}
-            placeholder="E.g. Morning workout"
-            autoCapitalize="sentences"
-            returnKeyType="next"
-          />
-          <Input
-            label="Description"
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Optional details"
-            autoCapitalize="sentences"
-            multiline
+              value={name}
+              onChangeText={setName}
+              placeholder="E.g. Morning workout"
+              autoCapitalize="sentences"
+              returnKeyType="next"
+              className={"py-3 px-6 text-5xl tracking-wider "}
           />
         </View>
-        <View className="w-16">
+        <View className={"gap-3 mb-4"}>
+          <Text className={"text-xl font-extrabold text-white"}>
+            Enter the description
+          </Text>
           <Input
-            label="Pts"
-            value={points}
-            onChangeText={setPoints}
-            keyboardType="number-pad"
-            maxLength={2}
+              value={description}
+              onChangeText={setDescription}
+              placeholder="Optional details"
+              autoCapitalize="sentences"
+              multiline
+              className={"py-3 px-6 text-5xl tracking-wider "}
+          />
+
+
+        </View>
+        <View className={"gap-3 mb-4"}>
+          <Text className={"text-xl font-extrabold text-white"}>
+            Enter the Points
+          </Text>
+          <Input
+              value={points}
+              onChangeText={setPoints}
+              placeholder={"10, 20, 50"}
+              keyboardType="number-pad"
+              maxLength={2}
+
+              className={"py-3 px-6 text-5xl tracking-wider "}
           />
         </View>
+
       </View>
       {error ? <ErrorMessage message={error} /> : null}
-      <Button
-        title={submitting ? "Adding..." : "Add task"}
-        onPress={handleSubmit}
-        disabled={submitting}
-      />
+      <TouchableOpacity className={"bg-blue-600 active:bg-blue-700 py-3 rounded-xl items-center "} onPress={handleSubmit}>
+        <Text className={"text-4xl font-extrabold text-white"}>
+          Add tasks
+        </Text>
+      </TouchableOpacity>
+
     </View>
   );
 }

@@ -38,7 +38,7 @@ export function Button({
         disabled ? "opacity-60" : ""
       }`}
     >
-      <Text className={`text-sm font-semibold ${textVariants[variant]}`}>
+      <Text className={`text-sm font-semibold text-nowrap  ${textVariants[variant]}`}>
         {title}
       </Text>
     </Pressable>
