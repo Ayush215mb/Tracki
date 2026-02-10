@@ -11,7 +11,6 @@ import {Throttle, SkipThrottle, ThrottlerGuard} from '@nestjs/throttler';
 export class TasksController {
     constructor(private readonly tasksService: TasksService) {}
 
-    @Throttle({ default: { limit: 1, ttl: 60000 } })
     @Get()
     findAllTasks():Promise<Task[]> {
         return this.tasksService.findAllTasks();

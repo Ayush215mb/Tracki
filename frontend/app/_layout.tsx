@@ -10,12 +10,6 @@ export default function RootLayout() {
           title: "Tasks",
         }}
       />
-      <Stack.Screen
-        name="calendar"
-        options={{
-          title: "Calendar",
-        }}
-      />
     </Stack>
   );
 }
