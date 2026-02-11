@@ -3,40 +3,56 @@ import {Injectable, NotFoundException} from '@nestjs/common';
 import {Task} from './task.entity.js';
 import {DatabaseService} from "../database/database.service.js";
 import { Prisma } from '../generated/prisma/client.js';
+import {CreateTaskOutput, DeleteTaskOutput, UpdateTaskOutput} from "./Output.entity.js";
 
 @Injectable()
 export class TasksService {
     constructor(private prisma: DatabaseService) {}
 
-    getTaskById(id: Prisma.TaskWhereUniqueInput) :Promise<Task | null>{
-        return this.prisma.task.findUnique({where: id});
+  async getTaskById(id: Prisma.TaskWhereUniqueInput) :Promise<Task | null>{
+        const taskExists:Task|null = await this.prisma.task.findUnique({where:id})
+        if(!taskExists){
+            throw new NotFoundException("Task does not exist");
+        }
+        return taskExists
     }
 
   async findAllTasks(): Promise<Task[]> {
       return this.prisma.task.findMany();
     }
 
-    async createTask(data:Prisma.TaskCreateInput) {
-        return  this.prisma.task.create({data})
+    async createTask(data:Prisma.TaskCreateInput):Promise<CreateTaskOutput> {
+        const task:Task = await this.prisma.task.create({data})
+        return  {message: "Success", id: task.id}
     }
 
-    deleteTask(id: Prisma.TaskWhereUniqueInput) {
-        const TaskDeletion= this.prisma.task.delete({where:id})
+   async deleteTask(id: Prisma.TaskWhereUniqueInput):Promise<DeleteTaskOutput> {
+       const taskExists:Task|null = await this.getTaskById(id)
+       if(!taskExists){
+           throw new NotFoundException("Task does not exist");
+       }
+        const TaskDeletion:Task= await this.prisma.task.delete({where:id})
 
         console.log(TaskDeletion)
-       return {message: "Task Deletion Successfully"}
+       return {message: "success"}
     }
 
-
-    updateTask(params: {
+   async updateTask(params: {
         where: Prisma.TaskWhereUniqueInput;
         data: Prisma.TaskUpdateInput;
-    }):Promise<Task> {
+    }):Promise<UpdateTaskOutput> {
+
         const { where, data } = params;
-        return this.prisma.task.update({
+
+       const taskExists:Task|null = await this.getTaskById(where)
+       if(!taskExists){
+           throw new NotFoundException("Task does not exist");
+       }
+       const updatedTask:Task = await this.prisma.task.update({
             data,
             where,
         });
+        return {message: "success", id: updatedTask.id}
     }
 
 

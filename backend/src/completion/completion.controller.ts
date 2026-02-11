@@ -5,13 +5,14 @@ import {CreateCompletionDto} from "./dto/create-completion.dto.js";
 import {UpdateCompletionDto} from "./dto/update-completion.dto.js";
 import {Completion} from "./completion.entity.js";
 import {Dates} from "./dates.entity.js";
+import {CreateCompletionOutput, UpdateCompletionOutput} from "./output.entity.js";
 
 @Controller('completion')
 export class CompletionController {
     constructor(private readonly CompletionService: CompletionService) {}
 
     @Get()
-    getAllCompletions(){
+    getAllCompletions():Promise<Completion[]> {
         return this.CompletionService.getAllCompletions()
     }
 
@@ -26,12 +27,12 @@ export class CompletionController {
     }
 
     @Post()
-    createCompletion(@Body() CreateCompletionDto: CreateCompletionDto):Promise<Completion> {
+    createCompletion(@Body() CreateCompletionDto: CreateCompletionDto):Promise<CreateCompletionOutput> {
         return this.CompletionService.createCompletion(CreateCompletionDto);
     }
 
     @Patch(':id')
-    updateCompletion(@Param('id') id:string,@Body() UpdateCompletionDto: UpdateCompletionDto):Promise<Completion> {
+    updateCompletion(@Param('id') id:string,@Body() UpdateCompletionDto: UpdateCompletionDto):Promise<UpdateCompletionOutput> {
         return this.CompletionService.updateCompletion({
             where: {id},
             data: UpdateCompletionDto,
