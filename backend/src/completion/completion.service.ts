@@ -1,10 +1,10 @@
-// modules/calendar/calendar.service.ts
 import {Injectable, NotFoundException} from '@nestjs/common';
 import { TasksService } from '../tasks/tasks.service.js';
 import {DatabaseService} from "../database/database.service.js";
 import {Task} from "../tasks/task.entity.js";
 import { Prisma } from '../generated/prisma/client.js';
 import {Completion} from "./completion.entity.js";
+import {Dates} from "./dates.entity.js";
 
 @Injectable()
 export class CompletionService {
@@ -16,6 +16,15 @@ export class CompletionService {
 
     getAllCompletions():Promise<Completion[]>{
         return this.prisma.completion.findMany();
+    }
+
+   async getAllDates():Promise<Dates[]>{
+        const completions:Completion[] = await this.prisma.completion.findMany();
+        let dates:Array<Dates> = [];
+        for (const completion of completions){
+            dates.push({date: completion.date, month: completion.month});
+        }
+        return dates;
     }
 
     async createCompletion(data:Prisma.CompletionCreateInput):Promise<Completion> {

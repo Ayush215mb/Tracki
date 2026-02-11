@@ -4,6 +4,7 @@ import { CompletionService } from './completion.service.js';
 import {CreateCompletionDto} from "./dto/create-completion.dto.js";
 import {UpdateCompletionDto} from "./dto/update-completion.dto.js";
 import {Completion} from "./completion.entity.js";
+import {Dates} from "./dates.entity.js";
 
 @Controller('completion')
 export class CompletionController {
@@ -12,6 +13,11 @@ export class CompletionController {
     @Get()
     getAllCompletions(){
         return this.CompletionService.getAllCompletions()
+    }
+
+    @Get('dates')
+    getAllDates():Promise<Dates[]>{
+        return this.CompletionService.getAllDates();
     }
 
     @Get(':id')
@@ -31,5 +37,7 @@ export class CompletionController {
             data: UpdateCompletionDto,
         })
     }
+
+
 
 }

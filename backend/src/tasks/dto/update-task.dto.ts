@@ -3,9 +3,6 @@ import {TaskPoints} from "../taskpoints.entity.js";
 
 
 export class UpdateTaskDto {
-    @IsString()
-    @IsOptional()
-    id?:string
 
     @IsString()
     @IsOptional()
