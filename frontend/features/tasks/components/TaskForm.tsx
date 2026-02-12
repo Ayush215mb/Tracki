@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/Input";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import {TaskPoints} from "@/lib/types";
 import {createTask} from "@/services/api";
-import ErrorNotification from "@/components/ui/ErrorNotification";
 
 type TaskFormProps = {
   onSubmit: (values: {
@@ -63,18 +62,18 @@ export function TaskForm() {
     }
   };
 
-
   if(submitting){
     return (
-        <ActivityIndicator/>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" />
+        </View>
     )
   }
-
   return (
-    <View className="mb-4 gap-3 rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-4 ">
+    <View className="border border-slate-800 bg-slate-900/60 px-4 rounded-xl py-5 ">
       <View className="">
-        <View className={"gap-3 mb-4"}>
-          <Text className={"text-xl font-extrabold text-white"}>
+        <View className={" mb-4"}>
+          <Text className={ "text-lg text-white tracking-wider mb-2 "}>
             Enter the Task
           </Text>
           <Input
@@ -83,11 +82,11 @@ export function TaskForm() {
               placeholder="E.g. Morning workout"
               autoCapitalize="sentences"
               returnKeyType="next"
-              className={"py-3 px-6 text-5xl tracking-wider "}
+              className={" px-4 py-3 "}
           />
         </View>
-        <View className={"gap-3 mb-4"}>
-          <Text className={"text-xl font-extrabold text-white"}>
+        <View className={"mb-4 "}>
+          <Text className={ "text-lg text-white tracking-wider mb-2 "}>
             Enter the description
           </Text>
           <Input
@@ -96,13 +95,13 @@ export function TaskForm() {
               placeholder="Optional details"
               autoCapitalize="sentences"
               multiline
-              className={"py-3 px-6 text-5xl tracking-wider "}
+              className={" px-4 py-3"}
           />
 
 
         </View>
-        <View className={"gap-3 mb-4"}>
-          <Text className={"text-xl font-extrabold text-white"}>
+        <View className={"mb-4"}>
+          <Text className={ "text-lg text-white tracking-wider mb-2 "}>
             Enter the Points
           </Text>
           <Input
@@ -112,13 +111,13 @@ export function TaskForm() {
               keyboardType="number-pad"
               maxLength={2}
 
-              className={"py-3 px-6 text-5xl tracking-wider "}
+              className={" px-4 py-3"}
           />
         </View>
-
       </View>
+
       {error ? <ErrorMessage message={error} /> : null}
-      <TouchableOpacity className={"bg-blue-600 active:bg-blue-700 py-3 rounded-xl items-center "} onPress={handleSubmit}>
+      <TouchableOpacity className={"bg-blue-600 active:bg-blue-700 py-3 rounded-xl items-center"} onPress={handleSubmit}>
         <Text className={"text-4xl font-extrabold text-white"}>
           Add tasks
         </Text>

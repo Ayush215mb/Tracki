@@ -25,3 +25,8 @@ export type ErrorTyp={
   message: string;
   description: string;
 }
+
+export type Dates={
+  date: number;
+  month: number;
+}

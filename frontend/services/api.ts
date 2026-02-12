@@ -1,6 +1,7 @@
 import axios from "axios";
 import {API_BASE_URL} from "@/lib/config"
 import {TaskPayload, UpdateTaskPayload} from "@/services/payload";
+import {Dates} from "@/lib/types";
 
 export async function getAllTasks(){
     try{
@@ -45,3 +46,14 @@ export async function deleteTask(id:string){
         console.error(error);
     }
 }
+
+export async function getAllDates():Promise<Dates[] | undefined>{
+    try{
+        const response = await axios.get(`${API_BASE_URL}/completion/dates`);
+
+        return response.data;
+    }catch (error){
+        console.error(error);
+    }
+}
+

@@ -9,5 +9,13 @@ module.exports = {
   theme: {
     extend: {}
   },
+  safelist: [
+    'py-6',
+    'py-4',
+    'py-8',
+      'py-5',
+      'mb-10'
+    // Add any other classes that aren't rendering
+  ],
   plugins: []
 };
