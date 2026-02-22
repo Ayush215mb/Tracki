@@ -44,8 +44,3 @@ export { Prisma }
  * 
  */
 export type Task = Prisma.TaskModel
-/**
- * Model Completion
- * 
- */
-export type Completion = Prisma.CompletionModel

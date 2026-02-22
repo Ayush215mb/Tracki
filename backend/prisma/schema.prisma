@@ -19,11 +19,3 @@ model Task {
   description String
   points      Int
 }
-
-model Completion {
-  id        String  @id @default(uuid())
-  TaskId    String
-  date      Int
-  month     Int
-  completed Boolean @default(false)
-}

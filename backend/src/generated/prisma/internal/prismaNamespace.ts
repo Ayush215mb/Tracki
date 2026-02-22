@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.3.0
- * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
+ * Prisma Client JS version: 7.4.1
+ * Query Engine version: 55ae170b1ced7fc6ed07a15f110549408c501bb3
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.3.0",
-  engine: "9d6ad21cbbceab97458517b147a6a09ff43aa735"
+  client: "7.4.1",
+  engine: "55ae170b1ced7fc6ed07a15f110549408c501bb3"
 }
 
 /**
@@ -384,8 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  Task: 'Task',
-  Completion: 'Completion'
+  Task: 'Task'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +400,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "task" | "completion"
+    modelProps: "task"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -479,80 +478,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Completion: {
-      payload: Prisma.$CompletionPayload<ExtArgs>
-      fields: Prisma.CompletionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.CompletionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.CompletionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>
-        }
-        findFirst: {
-          args: Prisma.CompletionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.CompletionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>
-        }
-        findMany: {
-          args: Prisma.CompletionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>[]
-        }
-        create: {
-          args: Prisma.CompletionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>
-        }
-        createMany: {
-          args: Prisma.CompletionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.CompletionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>[]
-        }
-        delete: {
-          args: Prisma.CompletionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>
-        }
-        update: {
-          args: Prisma.CompletionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>
-        }
-        deleteMany: {
-          args: Prisma.CompletionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.CompletionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.CompletionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>[]
-        }
-        upsert: {
-          args: Prisma.CompletionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompletionPayload>
-        }
-        aggregate: {
-          args: Prisma.CompletionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateCompletion>
-        }
-        groupBy: {
-          args: Prisma.CompletionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CompletionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.CompletionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CompletionCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -602,17 +527,6 @@ export const TaskScalarFieldEnum = {
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
-export const CompletionScalarFieldEnum = {
-  id: 'id',
-  TaskId: 'TaskId',
-  date: 'date',
-  month: 'month',
-  completed: 'completed'
-} as const
-
-export type CompletionScalarFieldEnum = (typeof CompletionScalarFieldEnum)[keyof typeof CompletionScalarFieldEnum]
-
-
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -660,13 +574,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -779,7 +686,6 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   task?: Prisma.TaskOmit
-  completion?: Prisma.CompletionOmit
 }
 
 /* Types for Logging */

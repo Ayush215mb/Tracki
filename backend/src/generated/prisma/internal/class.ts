@@ -17,18 +17,26 @@ import type * as Prisma from "./prismaNamespace.js"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.3.0",
-  "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
+  "clientVersion": "7.4.1",
+  "engineVersion": "55ae170b1ced7fc6ed07a15f110549408c501bb3",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Task {\n  id          String @id @default(uuid())\n  name        String\n  description String\n  points      Int\n}\n\nmodel Completion {\n  id        String  @id @default(uuid())\n  TaskId    String\n  date      Int\n  month     Int\n  completed Boolean @default(false)\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Task {\n  id          String @id @default(uuid())\n  name        String\n  description String\n  points      Int\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
     "types": {}
+  },
+  "parameterizationSchema": {
+    "strings": [],
+    "graph": ""
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"points\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"Completion\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"TaskId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"month\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"completed\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"points\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.parameterizationSchema = {
+  strings: JSON.parse("[\"where\",\"Task.findUnique\",\"Task.findUniqueOrThrow\",\"orderBy\",\"cursor\",\"Task.findFirst\",\"Task.findFirstOrThrow\",\"Task.findMany\",\"data\",\"Task.createOne\",\"Task.createMany\",\"Task.createManyAndReturn\",\"Task.updateOne\",\"Task.updateMany\",\"Task.updateManyAndReturn\",\"create\",\"update\",\"Task.upsertOne\",\"Task.deleteOne\",\"Task.deleteMany\",\"having\",\"_count\",\"_avg\",\"_sum\",\"_min\",\"_max\",\"Task.groupBy\",\"Task.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"name\",\"description\",\"points\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"not\",\"contains\",\"startsWith\",\"endsWith\",\"set\",\"increment\",\"decrement\",\"multiply\",\"divide\"]"),
+  graph: "KwsQBxwAACIAMB0AAAQAEB4AACIAMB8BAAAAASABACMAISEBACMAISICACQAIQEAAAABACABAAAAAQAgBxwAACIAMB0AAAQAEB4AACIAMB8BACMAISABACMAISEBACMAISICACQAIQADAAAABAAgAwAABQAwBAAAAQAgAwAAAAQAIAMAAAUAMAQAAAEAIAMAAAAEACADAAAFADAEAAABACAEHwEAAAABIAEAAAABIQEAAAABIgIAAAABAQgAAAkAIAQfAQAAAAEgAQAAAAEhAQAAAAEiAgAAAAEBCAAACwAwAQgAAAsAMAQfAQAqACEgAQAqACEhAQAqACEiAgArACECAAAAAQAgCAAADgAgBB8BACoAISABACoAISEBACoAISICACsAIQIAAAAEACAIAAAQACACAAAABAAgCAAAEAAgAwAAAAEAIA8AAAkAIBAAAA4AIAEAAAABACABAAAABAAgBRUAACUAIBYAACYAIBcAACkAIBgAACgAIBkAACcAIAccAAAaADAdAAAXABAeAAAaADAfAQAbACEgAQAbACEhAQAbACEiAgAcACEDAAAABAAgAwAAFgAwFAAAFwAgAwAAAAQAIAMAAAUAMAQAAAEAIAccAAAaADAdAAAXABAeAAAaADAfAQAbACEgAQAbACEhAQAbACEiAgAcACEOFQAAHgAgGAAAIQAgGQAAIQAgIwEAAAABJAEAAAAEJQEAAAAEJgEAAAABJwEAAAABKAEAAAABKQEAAAABKgEAIAAhKwEAAAABLAEAAAABLQEAAAABDRUAAB4AIBYAAB8AIBcAAB4AIBgAAB4AIBkAAB4AICMCAAAAASQCAAAABCUCAAAABCYCAAAAAScCAAAAASgCAAAAASkCAAAAASoCAB0AIQ0VAAAeACAWAAAfACAXAAAeACAYAAAeACAZAAAeACAjAgAAAAEkAgAAAAQlAgAAAAQmAgAAAAEnAgAAAAEoAgAAAAEpAgAAAAEqAgAdACEIIwIAAAABJAIAAAAEJQIAAAAEJgIAAAABJwIAAAABKAIAAAABKQIAAAABKgIAHgAhCCMIAAAAASQIAAAABCUIAAAABCYIAAAAAScIAAAAASgIAAAAASkIAAAAASoIAB8AIQ4VAAAeACAYAAAhACAZAAAhACAjAQAAAAEkAQAAAAQlAQAAAAQmAQAAAAEnAQAAAAEoAQAAAAEpAQAAAAEqAQAgACErAQAAAAEsAQAAAAEtAQAAAAELIwEAAAABJAEAAAAEJQEAAAAEJgEAAAABJwEAAAABKAEAAAABKQEAAAABKgEAIQAhKwEAAAABLAEAAAABLQEAAAABBxwAACIAMB0AAAQAEB4AACIAMB8BACMAISABACMAISEBACMAISICACQAIQsjAQAAAAEkAQAAAAQlAQAAAAQmAQAAAAEnAQAAAAEoAQAAAAEpAQAAAAEqAQAhACErAQAAAAEsAQAAAAEtAQAAAAEIIwIAAAABJAIAAAAEJQIAAAAEJgIAAAABJwIAAAABKAIAAAABKQIAAAABKgIAHgAhAAAAAAABLgEAAAABBS4CAAAAAS8CAAAAATACAAAAATECAAAAATICAAAAAQAAAAAFFQAGFgAHFwAIGAAJGQAKAAAAAAAFFQAGFgAHFwAIGAAJGQAKAQIBAgMBBQYBBgcBBwgBCQoBCgwCCw0DDA8BDRECDhIEERMBEhQBExUCGhgFGxkL"
+}
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -166,7 +174,7 @@ export interface PrismaClient<
    * ])
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
+   * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
    */
   $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): runtime.Types.Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
@@ -185,16 +193,6 @@ export interface PrismaClient<
     * ```
     */
   get task(): Prisma.TaskDelegate<ExtArgs, { omit: OmitOpts }>;
-
-  /**
-   * `prisma.completion`: Exposes CRUD operations for the **Completion** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Completions
-    * const completions = await prisma.completion.findMany()
-    * ```
-    */
-  get completion(): Prisma.CompletionDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

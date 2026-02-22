@@ -51,8 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Task: 'Task',
-  Completion: 'Completion'
+  Task: 'Task'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -79,17 +78,6 @@ export const TaskScalarFieldEnum = {
 } as const
 
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
-
-
-export const CompletionScalarFieldEnum = {
-  id: 'id',
-  TaskId: 'TaskId',
-  date: 'date',
-  month: 'month',
-  completed: 'completed'
-} as const
-
-export type CompletionScalarFieldEnum = (typeof CompletionScalarFieldEnum)[keyof typeof CompletionScalarFieldEnum]
 
 
 export const SortOrder = {
