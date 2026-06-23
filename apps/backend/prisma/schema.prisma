@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Profile {
+  id         String     @id @default(uuid())
+  username   String     @unique
+  name       String?
+  age        Int?
+  city       String?
+  timezone   String     @default("UTC")
+  appStreak  Int        @default(0)
+  createdAt  DateTime   @default(now())
+  photoUrl   String?
+  totalScore Int        @default(0)
+  updatedAt  DateTime   @updatedAt
+  habitLogs  HabitLog[]
+  habits     Habit[]
+
+  @@map("profiles")
+}
+
+model Habit {
+  id            String         @id @default(uuid())
+  name          String
+  description   String?
+  frequency     HabitFrequency @default(DAILY)
+  createdAt     DateTime       @default(now())
+  habitStreak   Int            @default(0)
+  isActive      Boolean        @default(true)
+  pointsValue   Int            @default(1)
+  scheduledDays Int[]
+  updatedAt     DateTime       @updatedAt
+  userId        String
+  logs          HabitLog[]
+  profile       Profile        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("habits")
+}
+
+model HabitLog {
+  id           String   @id @default(uuid())
+  completed    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  habitId      String
+  logDate      DateTime @db.Date
+  pointsEarned Int      @default(0)
+  userId       String
+  habit        Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, logDate])
+  @@index([userId, logDate])
+  @@map("habit_logs")
+}
+
+enum HabitFrequency {
+  DAILY
+  WEEKLY
+  CUSTOM
+}
