@@ -16,6 +16,9 @@ export class CreateAuthDto {
   phone_number?: number;
 
   @IsString()
+  username!: string;
+
+  @IsString()
   @MinLength(8)
   password!: string;
 }
