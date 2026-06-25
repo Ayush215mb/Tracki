@@ -8,9 +8,9 @@ datasource db {
 }
 
 model Profile {
-  id          String  @id @default(uuid())
-  email       String? @unique
-  phoneNumber Int?    @unique
+  id          String @id @default(uuid())
+  email       String @unique
+  phoneNumber Int?   @unique
   password    String
 
   username String  @unique
