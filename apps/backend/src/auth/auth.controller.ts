@@ -25,8 +25,8 @@ export class AuthController {
 
   @Post('signup')
   async signup(@Body() createAuthDto: CreateAuthDto) {
-    if (!createAuthDto.email && !createAuthDto.phone_number) {
-      throw new BadRequestException('Either email or phone_number is required');
+    if (!createAuthDto.email) {
+      throw new BadRequestException('Email is required');
     }
 
     if (!createAuthDto.username) {

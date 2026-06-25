@@ -24,20 +24,27 @@ export class AuthService {
     createAuthDto: CreateAuthDto,
   ): Promise<{ code: number; message: string; data: { id: string } }> {
     try {
-      const usernametaken: Profile | null =
-        await this.prisma.profile.findUnique({
+      const [usernametaken, emailtaken] = await Promise.all([
+        this.prisma.profile.findUnique({
           where: { username: createAuthDto.username },
-        });
+        }),
+        this.prisma.profile.findUnique({
+          where: { email: createAuthDto.email },
+        }),
+      ]);
 
       if (usernametaken) {
         throw new BadRequestException('Username already taken');
+      }
+
+      if (emailtaken) {
+        throw new BadRequestException('Email already exists');
       }
       const hashedpassword = await hash(createAuthDto.password, 10);
 
       const user: Profile = await this.prisma.profile.create({
         data: {
           email: createAuthDto.email,
-          phoneNumber: createAuthDto.phone_number,
           password: hashedpassword,
           username: createAuthDto.username,
         },
@@ -48,12 +55,13 @@ export class AuthService {
         message: 'user created successfully',
         data: { id: user.id },
       };
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof BadRequestException) throw error;
 
       throw new Error(error as any);
     }
   }
+
   async login(
     loginDto: LoginDto,
   ): Promise<{ code: number; message: string; token: string }> {
