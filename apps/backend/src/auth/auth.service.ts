@@ -13,6 +13,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtAuthPayload } from './types/auth-jwtpayload';
 import { PrismaService } from '../prisma/prisma.service';
 import { Profile } from '../../prisma/generated/prisma';
+import { ApiResponse } from '@tracki/constants';
 @Injectable()
 export class AuthService {
   constructor(
@@ -22,7 +23,7 @@ export class AuthService {
 
   async create_user(
     createAuthDto: CreateAuthDto,
-  ): Promise<{ code: number; message: string; data: { id: string } }> {
+  ): Promise<ApiResponse<{ id: string }>> {
     try {
       const [usernametaken, emailtaken] = await Promise.all([
         this.prisma.profile.findUnique({
@@ -50,11 +51,7 @@ export class AuthService {
         },
       });
 
-      return {
-        code: 201,
-        message: 'user created successfully',
-        data: { id: user.id },
-      };
+      return { success: true, message: 'User created', data: { id: user.id } };
     } catch (error: unknown) {
       if (error instanceof BadRequestException) throw error;
 
@@ -64,7 +61,7 @@ export class AuthService {
 
   async login(
     loginDto: LoginDto,
-  ): Promise<{ code: number; message: string; token: string }> {
+  ): Promise<ApiResponse<{ accessToken: string }>> {
     const { username, password } = loginDto;
     if (!username || !password) {
       throw new BadRequestException('username and password are required');
@@ -85,15 +82,15 @@ export class AuthService {
     }
 
     return {
-      code: 200,
-      message: 'login successful',
-      token: this.genJwtToken(user),
+      success: true,
+      message: 'Login successful',
+      data: { accessToken: this.genJwtToken(user) },
     };
   }
 
   async onboarding(
     userDto: OnboardingDto,
-  ): Promise<{ code: number; message: string; data: { id: string } }> {
+  ): Promise<ApiResponse<{ id: string }>> {
     try {
       const { username, email, phoneNumber } = userDto;
       const user: Profile | null = await this.prisma.profile.findUnique({
@@ -134,8 +131,8 @@ export class AuthService {
       });
 
       return {
-        code: 200,
-        message: 'Update done',
+        success: true,
+        message: 'Onboarding completed',
         data: { id: updatedUser.id },
       };
     } catch (error) {
@@ -144,7 +141,7 @@ export class AuthService {
     }
   }
 
-  async getProfile(user: Profile): Promise<Profile> {
+  async getProfile(user: Profile): Promise<ApiResponse<Profile>> {
     try {
       const profile: Profile | null = await this.prisma.profile.findUnique({
         where: { id: user.id },
@@ -152,8 +149,9 @@ export class AuthService {
       if (!profile) {
         throw new BadRequestException("User dones't exist");
       }
-      return profile;
+      return { success: true, data: profile };
     } catch (err) {
+      if (err instanceof BadRequestException) throw err;
       throw new Error(err as any);
     }
   }
@@ -161,37 +159,6 @@ export class AuthService {
   sendOtp(email: string) {}
 
   verifyOtp(code: string, email: string) {}
-
-  async changePassword(
-    username: string,
-    oldpassword: string,
-    newPassword: string,
-  ): Promise<{ code: number; message: string; data: { id: string } }> {
-    const user: Profile | null = await this.prisma.profile.findUnique({
-      where: { username },
-    });
-
-    if (!user) {
-      throw new BadRequestException("Username doesn't exist");
-    }
-
-    const valid = await compare(oldpassword, user.password);
-
-    if (!valid) {
-      throw new BadRequestException("Password doesn't match");
-    }
-
-    const updateuser = await this.prisma.profile.update({
-      where: { username },
-      data: { password: newPassword },
-    });
-
-    return {
-      code: 200,
-      message: 'Password changed',
-      data: { id: updateuser.id },
-    };
-  }
 
   private genJwtToken(user: Profile): string {
     const payload: JwtAuthPayload = { username: user.username, sub: user.id };

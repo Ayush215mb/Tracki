@@ -8,7 +8,7 @@ import {
   PASSWORD_MIN_SPECIAL_CHARACTERS,
   PASSWORD_MIN_UPPER_CASE_LETTERS,
   PASSWORD_TEST_REGEX,
-} from '../../constants';
+} from '@tracki/constants';
 import { sanitizePassword } from './create-auth.dto';
 
 export class LoginDto {

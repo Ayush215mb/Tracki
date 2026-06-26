@@ -15,7 +15,7 @@ import {
   PASSWORD_MIN_SPECIAL_CHARACTERS,
   PASSWORD_MIN_UPPER_CASE_LETTERS,
   PASSWORD_TEST_REGEX,
-} from '../../constants';
+} from '@tracki/constants';
 
 const sanitizeAndNormalizeEmail = (value: unknown): string | undefined => {
   if (value === undefined || value === null) return undefined;

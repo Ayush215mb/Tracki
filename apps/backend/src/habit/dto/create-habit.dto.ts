@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { HabitFrequency } from '../../constants';
+import { HabitFrequency } from '@tracki/constants';
 
 export class CreateHabitDto {
   @IsNotEmpty()
