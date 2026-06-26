@@ -1,5 +1,5 @@
-export const BACKEND_URL = 'http://localhost:8000';
-export const FRONTEND_URL = 'http://localhost:8081';
+export const BACKEND_URL = "http://localhost:8000";
+export const FRONTEND_URL = "http://localhost:8081";
 
 export const OTP_EXPIRATION_TIME_IN_SECONDS = 600; // 10 minutes
 export const OTP_CODE_LENGTH = 6;
@@ -30,7 +30,7 @@ export default {
 };
 
 export enum HabitFrequency {
-  DAILY = 'DAILY',
-  WEEKLY = 'WEEKLY',
-  CUSTOM = 'CUSTOM',
+  DAILY = "DAILY",
+  WEEKLY = "WEEKLY",
+  CUSTOM = "CUSTOM",
 }
