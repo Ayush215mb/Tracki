@@ -162,7 +162,6 @@ export class AuthService {
 
   private genJwtToken(user: Profile): string {
     const payload: JwtAuthPayload = { username: user.username, sub: user.id };
-    console.log(payload);
     return this.jwtService.sign(payload);
   }
 }
