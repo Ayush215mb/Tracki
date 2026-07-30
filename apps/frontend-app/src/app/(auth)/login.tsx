@@ -10,35 +10,30 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
+import CustomButton from "@/components/CustomButton";
 
 const Login = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogIn = async () => {
     setIsLoading(true);
-    // if (!email || !password) {
-    //   Alert.alert("Error", "Please fill all the details");
-    //   setIsLoading(false);
+    if (!username || !password) {
+      Alert.alert("Error", "Please fill all the details");
+      setIsLoading(false);
 
-    //   return;
-    // }
+      return;
+    }
 
-    // if (password.length < 6) {
-    //   Alert.alert("Password must be at least 3 characters long");
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (password.length < 7 || password.length > 20) {
+      Alert.alert("Password must be at least 3 characters long");
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      router.push("/(tabs)/profile");
-      const res = await axios.post("http://localhost:8000/auth/login", {
-        email,
-        password,
-      });
-      console.log(res);
       router.push("/(tabs)/profile");
     } catch (err) {
       Alert.alert("Error", "Failed to sign in");
@@ -62,20 +57,20 @@ const Login = () => {
 
       <View className=" items-center">
         <TextInput
-          placeholder="Enter your email"
+          placeholder="Enter your username"
           keyboardType="email-address"
           placeholderTextColor="#999"
           autoComplete="email"
-          className="border rounded-xl px-4 py-2 w-full mb-4 "
-          value={email}
-          onChangeText={setEmail}
+          className="border rounded-xl px-4 py-3 w-full mb-4 "
+          value={username}
+          onChangeText={setUsername}
         />
         <TextInput
           placeholder="Enter your password"
           placeholderTextColor="#999"
           autoComplete="password"
           secureTextEntry
-          className="border rounded-xl px-4 py-2 w-full mb-4 "
+          className="border rounded-xl px-4 py-3 w-full mb-4 "
           value={password}
           onChangeText={setPassword}
         />
@@ -92,7 +87,7 @@ const Login = () => {
             </Text>
           )}
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             router.push("/(auth)/signup");
           }}
@@ -101,7 +96,17 @@ const Login = () => {
             Don&apos;t have an account?{" "}
             <Text className="font-bold">Sign up</Text>
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <CustomButton
+          onpress={() => {
+            router.push("/(auth)/signup");
+          }}
+        >
+          <Text className="text-md tracking-wider">
+            Don&apos;t have an account?{" "}
+            <Text className="font-bold">Sign up</Text>
+          </Text>
+        </CustomButton>
       </View>
     </SafeAreaView>
   );
