@@ -96,6 +96,29 @@ export class HabitService {
     return { success: true, data: habits };
   }
 
+  async getActiveHabits(user: Profile) {
+    try {
+      const userexists = await this.prisma.profile.findUnique({
+        where: { id: user.id },
+      });
+      if (!userexists) {
+        throw new NotFoundException("User doesn't exist");
+      }
+      const activehabits: Habit[] | null = await this.prisma.habit.findMany({
+        where: { userId: user.id, isActive: true },
+      });
+
+      if (activehabits.length == 0) {
+        throw new NotFoundException('No Active habits');
+      }
+
+      return { success: true, data: activehabits };
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new Error(error as any);
+    }
+  }
+
   async getHabit({
     user,
     habitId,
@@ -146,7 +169,33 @@ export class HabitService {
       throw new Error(error as any);
     }
   }
-  async deleteHabit({ user, habitId }: { user: Profile; habitId: string }) {
+
+  async activateHabit({ user, habitId }: { user: Profile; habitId: string }) {
+    try {
+      const habitexists = await this.prisma.habit.findUnique({
+        where: { id: habitId, userId: user.id },
+      });
+      if (habitexists) {
+        const activateHabit = await this.prisma.habit.update({
+          where: { id: habitId, userId: user.id },
+          data: {
+            isActive: true,
+          },
+        });
+        return {
+          success: true,
+          message: 'Habit activated',
+        };
+      } else {
+        throw new NotFoundException("Habit doesn't exist");
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new Error(error as any);
+    }
+  }
+
+  async deactivateHabit({ user, habitId }: { user: Profile; habitId: string }) {
     try {
       const habitexists = await this.prisma.habit.findUnique({
         where: { id: habitId, userId: user.id },
@@ -163,6 +212,27 @@ export class HabitService {
       return {
         success: true,
         message: 'Habit deactivated',
+        data: deactivateHabit,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new Error(error as any);
+    }
+  }
+  async deleteHabit({ user, habitId }: { user: Profile; habitId: string }) {
+    try {
+      const habitexists = await this.prisma.habit.findUnique({
+        where: { id: habitId, userId: user.id },
+      });
+      if (!habitexists) {
+        throw new NotFoundException("Habit doesn't exist");
+      }
+      const deactivateHabit = await this.prisma.habit.delete({
+        where: { id: habitId },
+      });
+      return {
+        success: true,
+        message: 'Habit Deleted',
         data: deactivateHabit,
       };
     } catch (error) {

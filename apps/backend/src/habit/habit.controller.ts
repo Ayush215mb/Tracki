@@ -36,6 +36,21 @@ export class HabitController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('active')
+  getActiveHabits(@Req() req) {
+    return this.habitService.getActiveHabits(req.user as Profile);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('activate/:id')
+  activateHabit(@Req() req, @Param('id') id: string) {
+    return this.habitService.activateHabit({
+      user: req.user as Profile,
+      habitId: id,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   gethabit(@Req() req, @Param('id') id: string) {
     return this.habitService.getHabit({
@@ -55,6 +70,15 @@ export class HabitController {
       user: req.user as Profile,
       habitId: id,
       body: updateHabitDto,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('deactivate/:id')
+  deactivatehabit(@Req() req, @Param('id') id: string) {
+    return this.habitService.deactivateHabit({
+      user: req.user as Profile,
+      habitId: id,
     });
   }
 
