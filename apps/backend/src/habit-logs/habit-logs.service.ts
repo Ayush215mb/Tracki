@@ -1,26 +1,63 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateHabitLogDto } from './dto/create-habit-log.dto';
-import { UpdateHabitLogDto } from './dto/update-habit-log.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { Prisma, Profile } from '../../prisma/generated/prisma';
+import { ProfilesService } from '../profiles/profiles.service';
 
 @Injectable()
 export class HabitLogsService {
-  create(createHabitLogDto: CreateHabitLogDto) {
-    return 'This action adds a new habitLog';
-  }
+  constructor(
+    private readonly profile: ProfilesService,
+    private readonly prisma: PrismaService,
+  ) {}
 
-  findAll() {
-    return `This action returns all habitLogs`;
-  }
+  async logHabitCompletion({
+    createHabitLogDto,
+    user,
+  }: {
+    createHabitLogDto: CreateHabitLogDto;
+    user: Profile;
+  }) {
+    const { habitId, logDate } = createHabitLogDto;
 
-  findOne(id: number) {
-    return `This action returns a #${id} habitLog`;
-  }
+    const habit = await this.prisma.habit.findFirst({
+      where: { id: habitId, userId: user.id },
+    });
+    if (!habit) throw new NotFoundException("Habit doesn't exist");
 
-  update(id: number, updateHabitLogDto: UpdateHabitLogDto) {
-    return `This action updates a #${id} habitLog`;
-  }
+    try {
+      const [habitLog] = await this.prisma.$transaction([
+        this.prisma.habitLog.create({
+          data: {
+            habitId: habit.id,
+            userId: user.id,
+            completed: true,
+            pointsEarned: habit.pointsValue,
+            logDate: new Date(logDate),
+          },
+        }),
+        this.prisma.profile.update({
+          where: { id: user.id },
+          data: { totalScore: { increment: habit.pointsValue } },
+        }),
+      ]);
 
-  remove(id: number) {
-    return `This action removes a #${id} habitLog`;
+      return {
+        success: true,
+        message: 'Habit log created',
+        data: { id: habitLog.id },
+      };
+    } catch (error: unknown) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new BadRequestException(
+          'Log already exists for this habit and date',
+        );
+      }
+      throw error;
+    }
   }
 }
