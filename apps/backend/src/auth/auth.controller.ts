@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { OnboardingDto } from './dto/onboarding.dto';
+import { OnboardingDto } from '../profiles/dto/onboarding.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { Profile } from '../../prisma/generated/prisma';
@@ -38,21 +38,6 @@ export class AuthController {
     return await this.authService.login(loginDto);
   }
 
-  @Patch('onboarding')
-  async onboarding(@Body() userDto: OnboardingDto) {
-    if (!userDto.username) {
-      throw new BadRequestException('Username is required');
-    }
-
-    return await this.authService.onboarding(userDto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Req() req) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    return this.authService.getProfile(req.user as Profile);
-  }
   @Post('send-otp')
   sendOtp(@Body() email: string) {
     if (!email) {
