@@ -54,7 +54,7 @@ model Habit {
 
 model HabitLog {
   id           String   @id @default(uuid())
-  completed    Boolean  @default(true)
+  completed    Boolean  @default(false)
   createdAt    DateTime @default(now())
   habitId      String
   logDate      DateTime @db.Date
