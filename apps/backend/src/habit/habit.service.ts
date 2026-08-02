@@ -59,7 +59,7 @@ export class HabitService {
           name: createHabitDto.name,
           userId: userid,
           description: createHabitDto.description,
-          pointsValue: createHabitDto.score,
+          pointsValue: createHabitDto.pointsValue,
           frequency: createHabitDto.frequency,
           scheduledDays,
         },
@@ -96,23 +96,23 @@ export class HabitService {
     return { success: true, data: habits };
   }
 
-  async getActiveHabits(user: Profile) {
+  async getActiveHabits(
+    user: Profile,
+  ): Promise<ApiResponse<{ activehabits: Habit[] | [] }>> {
     try {
-      const userexists = await this.prisma.profile.findUnique({
-        where: { id: user.id },
-      });
-      if (!userexists) {
-        throw new NotFoundException("User doesn't exist");
-      }
       const activehabits: Habit[] | null = await this.prisma.habit.findMany({
         where: { userId: user.id, isActive: true },
       });
 
       if (activehabits.length == 0) {
-        throw new NotFoundException('No Active habits');
+        return {
+          success: true,
+          message: 'No active habits',
+          data: { activehabits: [] },
+        };
       }
 
-      return { success: true, data: activehabits };
+      return { success: true, data: { activehabits } };
     } catch (error) {
       if (error instanceof NotFoundException) throw error;
       throw new Error(error as any);
@@ -156,7 +156,7 @@ export class HabitService {
           data: {
             name: body.name,
             description: body.description,
-            pointsValue: body.score,
+            pointsValue: body.pointsValue,
             scheduledDays: body.scheduledDays,
           },
         });
@@ -166,7 +166,7 @@ export class HabitService {
       }
     } catch (error) {
       if (error instanceof NotFoundException) throw error;
-      throw new Error(error as any);
+      throw error;
     }
   }
 

@@ -79,21 +79,4 @@ export class ProfilesService {
       throw new Error(err as any);
     }
   }
-
-  async updatePoints(
-    userId: string,
-    habitId: string,
-  ): Promise<ApiResponse<{ id: string }>> {
-    try {
-      const habitexists = await this.prisma.habit.findUnique({
-        where: { id: habitId, userId: userId },
-      });
-
-      console.log(habitexists);
-      return { success: true, data: { id: 'hello' } };
-    } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      throw error;
-    }
-  }
 }

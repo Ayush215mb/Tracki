@@ -37,5 +37,5 @@ export class CreateHabitDto {
 
   @IsNotEmpty()
   @IsInt()
-  score!: number;
+  pointsValue!: number;
 }

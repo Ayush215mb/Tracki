@@ -1,11 +1,8 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
-  Param,
-  Delete,
   UseGuards,
   Req,
   BadRequestException,
@@ -30,8 +27,7 @@ export class ProfilesController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Req() req) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    return this.profilesService.getProfile(req.user as Profile);
+  getProfile(@Req() req: Request & { user: Profile }) {
+    return this.profilesService.getProfile(req.user);
   }
 }
